@@ -84,4 +84,6 @@ return [
 
     'navigation_title' => 'Blog',
 
+    'post_template' => null,
+
 ];

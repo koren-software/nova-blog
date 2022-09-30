@@ -40,7 +40,6 @@ class Post extends TemplateResource
     {
         // Get base data
         $tableName = config('nova-blog.blog_posts_table', 'nova_blog_posts');
-        $templateClass = $this->getTemplateClass();
         $templateFieldsAndPanels = $this->getTemplateFieldsAndPanels();
         $locales = NovaBlog::getLocales();
         $hasManyDifferentLocales = Post::select('locale')->distinct()->get()->count() > 1;
