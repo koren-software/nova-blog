@@ -60,7 +60,7 @@ return [
     |
     */
 
-    'locales' => ['en' => 'English'],
+    'locales' => ['en_US' => 'English'],
 
     'hide_pinned_post_option' => false,
 
