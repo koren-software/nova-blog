@@ -113,7 +113,8 @@ class Post extends TemplateResource
             Textarea::make('Post introduction', 'post_introduction'),
             config('nova-blog.include_featured_image') === true ? Image::make('Featured image', 'featured_image') : null,
             (config('nova-blog.hide_category_column_from_index') === true) ? $hideCategoryColumnInIndex : $showCategoryColumnInIndex,
-
+            Text::make('Post By', 'post_by'),
+            Image::make('Post Image', 'post_media')->hideFromIndex(),
             $postContent,
             config('nova-blog.include_related_posts_feature') === true && config('nova-blog.hide_related_posts_column_from_index') === false ?
                 Multiselect
