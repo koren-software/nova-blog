@@ -28,7 +28,7 @@ abstract class TemplateResource extends Resource
      **/
     protected function getTemplateFieldsAndPanels(): array
     {
-        $templateClass = $this->getTemplateClass();
+        $templateClass = config('nova-blog.post_template') ?:$this->getTemplateClass();
         $templateFields = [];
         $templatePanels = [];
 
@@ -70,5 +70,22 @@ abstract class TemplateResource extends Resource
             'fields' => $templateFields,
             'panels' => $templatePanels,
         ];
+    }
+
+    /**
+     * Gets the template fields and separates them into an
+     * array of two keys: 'fields' and 'panels'.
+     *
+     * @return array
+     **/
+    protected function getTemplateLayouts(): array
+    {
+        $templateClass = config('nova-blog.post_layout_template') ?:$this->getTemplateClass();
+        $templateFields = [];
+        if (isset($templateClass)) {
+            $templateFields = $templateClass->fields(request());
+        }
+
+        return $templateFields;
     }
 }

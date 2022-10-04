@@ -60,7 +60,7 @@ return [
     |
     */
 
-    'locales' => ['en' => 'English'],
+    'locales' => ['en_US' => 'English'],
 
     'hide_pinned_post_option' => false,
 
@@ -83,5 +83,9 @@ return [
     'hide_locale_column_from_index' => false,
 
     'navigation_title' => 'Blog',
+
+    'post_template' => null,
+
+    'post_layout_template' => null
 
 ];

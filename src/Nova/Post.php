@@ -40,8 +40,8 @@ class Post extends TemplateResource
     {
         // Get base data
         $tableName = config('nova-blog.blog_posts_table', 'nova_blog_posts');
-        $templateClass = $this->getTemplateClass();
         $templateFieldsAndPanels = $this->getTemplateFieldsAndPanels();
+        $getTemplateLayouts = $this->getTemplateLayouts();
         $locales = NovaBlog::getLocales();
         $hasManyDifferentLocales = Post::select('locale')->distinct()->get()->count() > 1;
 
@@ -55,9 +55,14 @@ class Post extends TemplateResource
         $relatedPosts = RelatedPost::where('post_id', $this->id)->pluck('related_post_id');
         $showCategoryColumnInIndex = config('nova-blog.hide_category_selector') === true ? null : BelongsTo::make('Category', 'category', 'OptimistDigital\NovaBlog\Nova\Category')->nullable();
         $hideCategoryColumnInIndex = config('nova-blog.hide_category_selector') === true ? null : BelongsTo::make('Category', 'category', 'OptimistDigital\NovaBlog\Nova\Category')->nullable()->hideFromIndex();
-
-        $postContent = Flexible::make('Post content', 'post_content')->hideFromIndex()
-            ->addLayout('Text section', 'text', [
+        
+        $postContent = Flexible::make('Post content', 'post_content')->hideFromIndex();
+        if(!empty($getTemplateLayouts)) {
+            foreach($getTemplateLayouts as $layout) {
+                $postContent->addLayout($layout['name'], $layout['id'], $layout['fields']);
+            }
+        } else {
+            $postContent->addLayout('Text section', 'text', [
                 config('nova-blog.use_trix') === true ? Trix::make('Text content', 'text_content') : Markdown::make('Text content', 'text_content'),
             ])
             ->addLayout('Image section', 'image', [
@@ -69,6 +74,7 @@ class Post extends TemplateResource
                 Textarea::make('Embed media code (twitter, iframe, etc.)', 'media_code'),
                 Text::make('Media caption', 'caption')
             ]);
+        }
 
         if (config('nova-blog.include_froala_texteditor_option')) {
             $postContent->addLayout('Text section in Froala', 'text_froala', [
