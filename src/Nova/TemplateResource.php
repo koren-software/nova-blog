@@ -81,7 +81,7 @@ abstract class TemplateResource extends Resource
      **/
     protected function getTemplateLayouts(): array
     {
-        $template = config('nova-blog.post_template');
+        $template = config('nova-blog.post_layout_template');
         $templateClass = $template != null ? new $template():$this->getTemplateClass();
         $templateFields = [];
         if (isset($templateClass)) {
