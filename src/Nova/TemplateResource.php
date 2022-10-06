@@ -28,7 +28,8 @@ abstract class TemplateResource extends Resource
      **/
     protected function getTemplateFieldsAndPanels(): array
     {
-        $templateClass = config('nova-blog.post_template') ?:$this->getTemplateClass();
+        $template = config('nova-blog.post_template');
+        $templateClass = $template != null ? new $template():$this->getTemplateClass();
         $templateFields = [];
         $templatePanels = [];
 
@@ -80,7 +81,8 @@ abstract class TemplateResource extends Resource
      **/
     protected function getTemplateLayouts(): array
     {
-        $templateClass = config('nova-blog.post_layout_template') ?:$this->getTemplateClass();
+        $template = config('nova-blog.post_template');
+        $templateClass = $template != null ? new $template():$this->getTemplateClass();
         $templateFields = [];
         if (isset($templateClass)) {
             $templateFields = $templateClass->fields(request());
