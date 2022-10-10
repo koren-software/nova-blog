@@ -26,6 +26,7 @@ use OptimistDigital\NovaBlog\Models\RelatedPost;
 use OptimistDigital\MultiselectField\Multiselect;
 use DigitalCreative\ConditionalContainer\ConditionalContainer;
 use DigitalCreative\ConditionalContainer\HasConditionalContainer;
+use App\Nova\Fields\ZaveTrumbowyg;
 
 class Post extends TemplateResource
 {
@@ -84,7 +85,7 @@ class Post extends TemplateResource
 
         $fields = [
             ID::make()->sortable(),
-            config('nova-blog.use_trix') === true ? Trix::make('Title', 'title')->rules('required')->alwaysShow() : Title::make('Title', 'title')->rules('required')->alwaysShow(),
+            config('nova-blog.use_trix') === true ? Trix::make('Title', 'title')->rules('required')->alwaysShow() : Text::make('Title', 'title')->rules('required')->alwaysShow(),
             config('nova-blog.hide_pinned_post_option') === true ? null : Boolean::make('Is pinned', 'is_pinned'),
             config('nova-blog.include_include_in_bloglist') === true ? Boolean::make('Include in bloglist', 'include_in_bloglist') : null,
             Slug::make('Slug', 'slug')->rules('required', 'alpha_dash_or_slash')->hideWhenUpdating()->hideFromIndex()->hideFromDetail(),
@@ -110,7 +111,7 @@ class Post extends TemplateResource
                         </div>";
             })->asHtml()->exceptOnForms(),
             DateTime::make('Published at', 'published_at')->rules('required'),
-            Textarea::make('Post introduction', 'post_introduction'),
+            ZaveTrumbowyg::make('Post introduction', 'post_introduction'),
             config('nova-blog.include_featured_image') === true ? Image::make('Featured image', 'featured_image') : null,
             (config('nova-blog.hide_category_column_from_index') === true) ? $hideCategoryColumnInIndex : $showCategoryColumnInIndex,
             Text::make('Post By', 'post_by'),
