@@ -53,10 +53,14 @@ if (!function_exists('nova_get_post_by_slug')) {
             }
         }
 
-        $featuredImagePath = null;
+        $featuredImagePath = null; $postMediaPath = isset($post->post_media) ? $post->post_media : null ;
 
         if ($post->featured_image) {
             $featuredImagePath = Storage::disk('public')->url($post->featured_image);
+        }
+
+        if($post->post_media) {
+            $postMediaPath = Storage::disk('public')->url($post->post_media);
         }
 
         return [
@@ -70,6 +74,8 @@ if (!function_exists('nova_get_post_by_slug')) {
             'post_content' => nova_blog_map_content(json_decode($post->post_content)),
             'related_posts' => $post->relatedPosts,
             'seo' => $seo,
+            'post_media' => $postMediaPath,
+            'post_by' => $post->post_by
         ];
     }
 }
