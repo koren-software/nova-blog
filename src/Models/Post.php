@@ -54,12 +54,12 @@ class Post extends Model
             unset($post->slug_generation);
         });
         static::saving(function ($post) {
-            if ($post->is_pinned) {
-                Post::where('is_pinned', true)->each(function ($pinnedPost) {
-                    $pinnedPost->is_pinned = false;
-                    $pinnedPost->save();
-                });
-            }
+            // if ($post->is_pinned) {
+            //     Post::where('is_pinned', true)->each(function ($pinnedPost) {
+            //         $pinnedPost->is_pinned = false;
+            //         $pinnedPost->save();
+            //     });
+            // }
             return true;
         });
         static::saved(function ($post) {

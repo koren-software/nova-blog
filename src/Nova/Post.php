@@ -111,7 +111,7 @@ class Post extends TemplateResource
                         </div>";
             })->asHtml()->exceptOnForms(),
             DateTime::make('Published at', 'published_at')->rules('required'),
-            ZaveTrumbowyg::make('Post introduction', 'post_introduction'),
+            ZaveTrumbowyg::make('Post introduction', 'post_introduction')->hideFromIndex(),
             config('nova-blog.include_featured_image') === true ? Image::make('Featured image', 'featured_image') : null,
             (config('nova-blog.hide_category_column_from_index') === true) ? $hideCategoryColumnInIndex : $showCategoryColumnInIndex,
             Text::make('Post By', 'post_by'),
