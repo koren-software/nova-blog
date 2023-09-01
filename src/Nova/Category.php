@@ -5,8 +5,10 @@ namespace OptimistDigital\NovaBlog\Nova;
 use Illuminate\Http\Request;
 use Laravel\Nova\Fields\ID;
 use Laravel\Nova\Fields\Text;
+use OptimistDigital\NovaBlog\NovaBlog;
 use OptimistDigital\NovaBlog\Nova\Fields\Slug;
 use OptimistDigital\NovaSortable\Traits\HasSortableRows;
+use OptimistDigital\NovaLocaleField\LocaleField;
 
 class Category extends TemplateResource
 {
@@ -44,11 +46,35 @@ class Category extends TemplateResource
      */
     public function fields(Request $request)
     {
-        return [
+        $locales = NovaBlog::getLocales();
+        $hasManyDifferentLocales = Category::select('locale')->distinct()->get()->count() > 1;
+
+        $fields = [
             ID::make()->sortable(),
-            Text::make('Title', 'title'),
+            Text::make('Title', 'title')->rules('required'),
             Slug::make('Slug', 'slug')->rules('required', 'alpha_dash_or_slash'),
         ];
+
+        if (NovaBlog::hasNovaLang()) {
+            $fields[] = \OptimistDigital\NovaLang\NovaLangField::make('Locale', 'locale', 'locale_parent_id')->onlyOnForms();
+        } else {
+           $fields[] = LocaleField::make('Locale', 'locale', 'locale_parent_id')
+                ->locales($locales)
+                ->onlyOnForms();
+        }
+
+        if (count($locales) > 1) {
+            $fields[] = LocaleField::make('Locale', 'locale', 'locale_parent_id')
+                ->locales($locales)
+                ->exceptOnForms()
+                ->maxLocalesOnIndex(3);
+        } else if ($hasManyDifferentLocales) {
+            $fields[] = Text::make('Locale', 'locale')->exceptOnForms();
+        }
+
+        return collect($fields)->filter(function ($field) {
+            return $field !== null;
+        })->toArray();
     }
 
     /**
