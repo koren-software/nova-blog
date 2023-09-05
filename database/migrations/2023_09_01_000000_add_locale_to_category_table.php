@@ -33,7 +33,7 @@ class AddLocaleToCategoryTable extends Migration
         $categoriesTable = config('nova-blog.blog_categories_table', 'nova_blog_posts');
 
         Schema::table($categoriesTable, function (Blueprint $table) {
-            $table->string('locale')->default('undefined');
+            $table->dropColumn('locale');
             $table->dropForeign(['locale_parent_id']);
             $table->dropColumn('locale_parent_id');
         });
